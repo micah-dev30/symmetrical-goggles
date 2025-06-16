@@ -69,13 +69,20 @@
 
     button:hover {
       opacity: 0.9;
-    }
-
-    .toggle-btn {
-      margin-bottom: 25px;
-      font-size: 14px;
-      padding: 8px 14px;
-      width: auto;
+      
+}.toggle-btn {
+  top: 16px;
+  right: 16px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: var(--btn-bg);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
     }
 
     ul {
@@ -198,20 +205,7 @@
       localStorage.setItem("tasks", JSON.stringify(tasks));
     }
 
-    function toggleTheme() {.toggle-btn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  padding: 8px 14px;
-  font-size: 14px;
-  background-color: var(--btn-bg);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
+    function toggleTheme() {.toggle-btn {}
     
     }
   </script>
