@@ -1,110 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Micah's To-Do List</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      text-align: center;
-      padding: 50px;
-    }
+<script>
+  const taskList = document.getElementById("taskList");
+  const taskInput = document.getElementById("taskInput");
 
-    h1 {
-      color: #ffffff;
-    }
+  // Load saved tasks on page load
+  window.onload = () => {
+    const saved = JSON.parse(localStorage.getItem("tasks")) || [];
+    saved.forEach(task => {
+      createTask(task.text, task.completed);
+    });
+  };
 
-    input[type="text"] {
-      padding: 12px;
-      width: 60%;
-      font-size: 16px;
-      background-color: #1f1f1f;
-      border: 1px solid #444;
-      color: #e0e0e0;
-      border-radius: 4px;
-    }
+  function addTask() {
+    const taskText = taskInput.value.trim();
+    if (taskText === "") return;
 
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #0d6efd;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+    createTask(taskText, false);
+    taskInput.value = "";
+    saveTasks();
+  }
 
-    button:hover {
-      background-color: #0b5ed7;
-    }
+  function createTask(text, completed) {
+    const li = document.createElement("li");
+    li.textContent = text;
+    if (completed) li.classList.add("completed");
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-      max-width: 400px;
-      margin: 30px auto;
-    }
+    li.addEventListener("click", () => {
+      li.classList.toggle("completed");
+      saveTasks();
+    });
 
-    li {
-      background: #1e1e1e;
-      padding: 12px;
-      margin: 8px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
-    }
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "✖";
+    deleteBtn.onclick = () => {
+      li.remove();
+      saveTasks();
+    };
+    li.appendChild(deleteBtn);
 
-    li.completed {
-      text-decoration: line-through;
-      color: #888;
-    }
+    taskList.appendChild(li);
+  }
 
-    li button {
-      background: #ff4d4f;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    li button:hover {
-      background: #e63946;
-    }
-  </style>
-</head>
-<body>
-  <h1>📝 Micah's To-Do List</h1>
-  <input type="text" id="taskInput" placeholder="What needs to get done?">
-  <button onclick="addTask()">Add</button>
-
-  <ul id="taskList"></ul>
-
-  <script>
-    function addTask() {
-      const input = document.getElementById("taskInput");
-      const taskText = input.value.trim();
-      if (taskText === "") return;
-
-      const li = document.createElement("li");
-      li.textContent = taskText;
-
-      li.addEventListener("click", () => {
-        li.classList.toggle("completed");
+  function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll("#taskList li").forEach(li => {
+      tasks.push({
+        text: li.childNodes[0].textContent.trim(),
+        completed: li.classList.contains("completed")
       });
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "✖";
-      deleteBtn.onclick = () => li.remove();
-      li.appendChild(deleteBtn);
-
-      document.getElementById("taskList").appendChild(li);
-      input.value = "";
-    }
-  </script>
-</body>
-</html>
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+</script>
