@@ -21,8 +21,13 @@
 
   function createTask(text, completed) {
     const li = document.createElement("li");
-    li.textContent = text;
+
+    const span = document.createElement("span");
+    span.textContent = text;
+
     if (completed) li.classList.add("completed");
+
+    li.appendChild(span);
 
     li.addEventListener("click", () => {
       li.classList.toggle("completed");
@@ -31,12 +36,13 @@
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "✖";
-    deleteBtn.onclick = () => {
+    deleteBtn.onclick = (e) => {
+      e.stopPropagation(); // prevent marking as completed
       li.remove();
       saveTasks();
     };
-    li.appendChild(deleteBtn);
 
+    li.appendChild(deleteBtn);
     taskList.appendChild(li);
   }
 
@@ -44,7 +50,7 @@
     const tasks = [];
     document.querySelectorAll("#taskList li").forEach(li => {
       tasks.push({
-        text: li.childNodes[0].textContent.trim(),
+        text: li.querySelector("span").textContent,
         completed: li.classList.contains("completed")
       });
     });
